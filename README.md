@@ -79,13 +79,7 @@ This will train the model and save it as `trained_model.pkl` in the `models/` di
 └── README.md               # Project documentation (this file)
 ```
 
-## Adding Screenshots of Output
-
-To add screenshots of the application output to this README:
-
-1. Create a folder in the project directory to store screenshots, e.g., `docs/screenshots/`.
-2. Save your screenshots in this folder.
-3. Add images to this README using Markdown syntax:
+```
 
 
 ![Landing Page](docs\screenshots\landing1.png)
@@ -96,6 +90,7 @@ To add screenshots of the application output to this README:
 ![Resume Screening](docs\screenshots\screening.png)
 
 ![Output](docs\screenshots\output.png)
+```
 
 
 ## Dependencies
