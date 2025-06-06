@@ -79,18 +79,7 @@ This will train the model and save it as `trained_model.pkl` in the `models/` di
 └── README.md               # Project documentation (this file)
 ```
 
-```
 
-
-![Landing Page](docs\screenshots\landing1.png)
-
-
-![Landing Page Continue](docs\screenshots\landing2.png)
-
-![Resume Screening](docs\screenshots\screening.png)
-
-![Output](docs\screenshots\output.png)
-```
 
 
 ## Dependencies
