@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Screening Results - TalentScreen: AI Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Screening Results</h1>
+            <a href="{{ url_for('upload_page') }}" class="btn btn-outline-primary">
+                <i class="fas fa-plus"></i> Screen Another Resume
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Overall Score</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    {% set status_class = 'success' if results.status == 'Excellent' else 'info' if results.status == 'Good' else 'warning' if results.status == 'Fair' else 'danger' %}
+                    <div class="display-1 text-{{ status_class }}">{{ results.overall_score }}</div>
+                    <div class="h4 text-{{ status_class }}">{{ results.status }}</div>
+                </div>
+                <div class="progress mb-3">
+                    <div class="progress-bar bg-{{ status_class }}" style="width: {{ results.overall_score * 100 }}%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h6>Quick Stats</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="h4 text-primary">{{ results.skills|length }}</div>
+                        <small class="text-muted">Skills Found</small>
+                    </div>
+                    <div class="col-6">
+                        <div class="h4 text-info">{{ results.experience_years }}</div>
+                        <small class="text-muted">Years Experience</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Score Breakdown</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Skills Match</span>
+                        <span>{{ results.breakdown.skills }}</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-primary" style="width: {{ results.breakdown.skills * 100 }}%"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Experience Level</span>
+                        <span>{{ results.breakdown.experience }}</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" style="width: {{ results.breakdown.experience * 100 }}%"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Education</span>
+                        <span>{{ results.breakdown.education }}</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-info" style="width: {{ results.breakdown.education * 100 }}%"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Job Match</span>
+                        <span>{{ results.breakdown.job_match }}</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-warning" style="width: {{ results.breakdown.job_match * 100 }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5>Identified Skills</h5>
+            </div>
+            <div class="card-body">
+                {% if results.skills %}
+                    {% for skill in results.skills %}
+                        <span class="badge bg-secondary me-1 mb-1">{{ skill }}</span>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No specific skills identified.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Resume Preview</h5>
+            </div>
+            <div class="card-body">
+                <div class="bg-light p-3 rounded">
+                    <h6>File: {{ filename }}</h6>
+                    <hr>
+                    <p class="small">{{ resume_text }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - TalentScreen: AI Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">Resume Screening Dashboard</h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Total Resumes</h5>
+                        <h2 id="total-resumes">-</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-file-alt fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Excellent Matches</h5>
+                        <h2 id="excellent-matches">-</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-star fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Good Matches</h5>
+                        <h2 id="good-matches">-</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-thumbs-up fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Fair Matches</h5>
+                        <h2 id="fair-matches">-</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-balance-scale fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Screening Results Distribution</h5>
+            </div>
+            <div class="card-body">
+                <div id="results-chart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Activity</h5>
+            </div>
+            <div class="card-body">
+                <div id="recent-activity">
+                    <p class="text-muted">Loading recent activity...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5>Ready to screen resumes?</h5>
+                <p class="text-muted">Upload resumes and job descriptions to start the AI-powered screening process.</p>
+                <a href="{{ url_for('upload_page') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-upload"></i> Screen Resume
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadDashboardData();
+});
+
+function loadDashboardData() {
+    fetch('/api/analytics')
+        .then(response => response.json())
+        .then(data => {
+            // Update cards
+            document.getElementById('total-resumes').textContent = data.total_resumes;
+            document.getElementById('excellent-matches').textContent = data.excellent_matches;
+            document.getElementById('good-matches').textContent = data.good_matches;
+            document.getElementById('fair-matches').textContent = data.fair_matches;
+            
+            // Update chart
+            updateResultsChart(data);
+            
+            // Update recent activity
+            updateRecentActivity(data.recent_activity);
+        })
+        .catch(error => {
+            console.error('Error loading dashboard data:', error);
+        });
+}
+
+function updateResultsChart(data) {
+    const chartData = [{
+        values: [data.excellent_matches, data.good_matches, data.fair_matches, data.poor_matches],
+        labels: ['Excellent', 'Good', 'Fair', 'Poor'],
+        type: 'pie',
+        marker: {
+            colors: ['#28a745', '#17a2b8', '#ffc107', '#dc3545']
+        }
+    }];
+
+    const layout = {
+        height: 300,
+        margin: { t: 30, b: 30, l: 30, r: 30 }
+    };
+
+    Plotly.newPlot('results-chart', chartData, layout);
+}
+
+function updateRecentActivity(activities) {
+    const container = document.getElementById('recent-activity');
+    container.innerHTML = '';
+    
+    activities.forEach(activity => {
+        const statusClass = activity.status.toLowerCase() === 'excellent' ? 'success' : 
+                           activity.status.toLowerCase() === 'good' ? 'info' : 'warning';
+        
+        const item = document.createElement('div');
+        item.className = 'mb-2 p-2 border-start border-3 border-' + statusClass;
+        item.innerHTML = `
+            <strong>${activity.name}</strong>
+            <br>
+            <small class="text-muted">Score: ${activity.score} - ${activity.status}</small>
+        `;
+        container.appendChild(item);
+    });
+}
+</script>
+{% endblock %}
