@@ -87,19 +87,15 @@ To add screenshots of the application output to this README:
 2. Save your screenshots in this folder.
 3. Add images to this README using Markdown syntax:
 
-```markdown
-![Landing Page](docs\screenshots\landing1.png)
-```
 
-```markdown
+![Landing Page](docs\screenshots\landing1.png)
+
+
 ![Landing Page Continue](docs\screenshots\landing2.png)
-```
-```markdown
+
 ![Resume Screening](docs\screenshots\screening.png)
-```
-```markdown
+
 ![Output](docs\screenshots\output.png)
-```
 
 
 ## Dependencies
