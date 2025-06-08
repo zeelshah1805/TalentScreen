@@ -16,8 +16,8 @@ This project is a Flask-based web application designed to screen resumes against
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/zeelshah1805/TalentScreen.git
+   cd TalentScreen
    ```
 
 2. Create and activate a virtual environment (optional but recommended):
